@@ -85,7 +85,7 @@ function ViewModel () {
         // into view and click it.
         google.maps.event.addListener(marker, 'click', function () {
             document.getElementById(place.id).scrollIntoView();
-            $('#' + place.id).trigger('click');
+            self.selectPlace(place);
         });
         return marker;
     }
@@ -305,7 +305,24 @@ function ViewModel () {
             });
     };
 
+
+    // Toggles visibility of search results list. If window size is less than 865px, list will be hidden
+    // until user will click on menu button.
+    self.openMenu = ko.observable(true);
+
+    $(window).resize(function() {
+        if ($(window).width() < 865)
+            self.openMenu(false);
+        else self.openMenu(true);
+    });
+
+    self.toggleMenu = function () {
+        self.openMenu(!self.openMenu());
+    };
+
     initMap();
+
+    $(window).resize();
 
 }
 
