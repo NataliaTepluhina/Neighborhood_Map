@@ -46,7 +46,7 @@
         <h2>FourSquare Info</h2>
         <h3 data-bind="text: fsName" class="fsname"></h3>
         <a data-bind="visible: fsLink, attr: {href: fsLink}" class="fslink">More at FourSquare</a>
-        <img data-bind="attr: {src: fsImg, alt: fsName}" class="fsimg">
+        <img data-bind="visible: fsImg(), attr: {src: fsImg, alt: fsName}" class="fsimg">
         <h3 data-bind="visible: !fsImg() && fsLink()">No image found</h3>
         <div class="links">
             <a data-bind="visible: fsUrl, attr: {href: fsUrl}">Official Site</a>
