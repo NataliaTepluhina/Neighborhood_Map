@@ -1,8 +1,24 @@
-// Creates the map with the center in given coordinates (Budva, Montenegro by default).  Then gets popular
-// restaurants/bars/cafe in the area.
-
 var map;
 var city;
+
+var viewModel = new ViewModel();
+
+// Creates the map with the center in given coordinates (Budva, Montenegro by default).  Then gets popular
+// restaurants/bars/cafe in the area.
+function initMap () {
+    city = {lat: 42.288056, lng: 18.8425};
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: city,
+        zoom: 15
+    });
+
+    viewModel.getAllPlaces();
+}
+
+//Error handler function for Google Maps loading script
+function googleError () {
+    alert('Error! Google Maps loading failed!');
+}
 
 function ViewModel () {
     var self = this;
@@ -20,8 +36,6 @@ function ViewModel () {
         5: 'Saturday',
         6: 'Sunday',
     };
-
-
 
 
     // Makes a request to Google for popular restaurants and hotels in a given place.
@@ -61,6 +75,10 @@ function ViewModel () {
                     place.geometry.location.lng()));
             });
             map.fitBounds(bounds);
+        }
+
+        else {
+            alert('Error! Google Places loading failed');
         }
     }
 
@@ -216,6 +234,9 @@ function ViewModel () {
                     locOpenHours = '<p>' + openHours + '</p>';
                 }
             }
+            else {
+                alert('Error! Google Places loading failed');
+            }
             var content = '<div class="infowindow">' + locName + locStreet +
                 locCityState + locPhone + locOpenHours + '</div>';
             infowindow.setContent(content);
@@ -247,10 +268,8 @@ function ViewModel () {
         self.fsRating('');
         var foursquareURL = fsBaseUrl + 'search?ll=42.288056,18.8425&query=' + name + '&' + fsAuth +'v=20160810';
             //Getting FourSquareID and url of the venue
-            $.ajax({
-                url: foursquareURL,
-
-                success: function(data) {
+            $.ajax({url: foursquareURL})
+                .done(function(data) {
                     if (data.response.venues.length > 0) {
                         fsID = data.response.venues[0].id;
                         if (data.response.venues[0].url) {
@@ -260,9 +279,8 @@ function ViewModel () {
                         foursquareURL = fsBaseUrl + fsID + '?' + fsAuth +'v=20160810';
 
                         //Getting venue image, Facebook link and rating (if present in foursquare info)
-                        $.ajax({
-                            url: foursquareURL,
-                            success: function(data) {
+                        $.ajax({url: foursquareURL})
+                            .done(function(data) {
                                 self.fsName(data.response.venue.name);
 
                                 if (data.response.venue.bestPhoto) {
@@ -277,24 +295,22 @@ function ViewModel () {
                                 if (data.response.venue.rating) {
                                     self.fsRating(data.response.venue.rating);
                                 }
-                            },
+                            })
 
-                            error: function(data) {
+                            .fail(function(data) {
                                 alert("Error occured while retrieving data from " +
                                     "FourSquare. Please try again later.");
-                            }
-                        });
+                            });
                     }
                     else {
                         self.fsName('No such venue in FourSquare');
                     }
-                },
+                })
 
-                error: function(data) {
+                .fail(function(data) {
                     alert("Error occured while retrieving data from " +
                         "FourSquare. Please try again later.");
-                }
-            });
+                });
     };
 
 
@@ -310,17 +326,5 @@ function ViewModel () {
 }
 
 
-
-var viewModel = new ViewModel();
-
-function initMap() {
-    city = {lat: 42.288056, lng: 18.8425};
-    map = new google.maps.Map(document.getElementById('map'), {
-        center: city,
-        zoom: 15
-    });
-
-    viewModel.getAllPlaces();
-}
 
 ko.applyBindings(viewModel);

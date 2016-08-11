@@ -15,7 +15,7 @@
     </div>
     <div data-bind="css: {'visible': openMenu()}" class="search-block">
         <form class='search' data-bind="submit: search">
-            <input class="search-bar" data-bind="value: query" placeholder="Enter name or type" autofocus></input>
+            <input class="search-bar" data-bind="textInput: query" placeholder="Enter name or type" autofocus></input>
             <button class="search-button" type="submit">
                 <i class="fa fa-search" aria-hidden="true"></i>
             </button>
@@ -51,7 +51,7 @@
         <div class="rating" data-bind="visible: fsRating, text: fsRating"></div>
     </div>
     <script src="js/app.js"></script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcb18LjYYs41yetSMlwi6zuywEU5rY_Wc&v=3&callback=initMap&libraries=places&">
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcb18LjYYs41yetSMlwi6zuywEU5rY_Wc&v=3&callback=initMap&libraries=places" onerror="googleError()"">
     </script>
 </body>
 </html>
