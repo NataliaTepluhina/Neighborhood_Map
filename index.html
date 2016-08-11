@@ -1,21 +1,20 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Neighborhood Map</title>
+    <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Neighborhood Map</title>
     <link rel="stylesheet" href="css/style.css">
     <link rel="stylesheet" href="font-awesome/css/font-awesome.min.css">
-    <script src="js/lib/jquery-3.1.0.min.js"></script>
-    <script src="js/lib/knockout-3.4.0.js"></script>
 </head>
 <body>
     <div id="map"></div>
-    <div  data-bind="click: toggleMenu, css: {'active': openMenu()}" class="search-replace">
+    <div data-bind="click: toggleMenu, css: {'active': openMenu()}" class="search-replace">
         <i class="fa fa-bars" aria-hidden="true"></i>
     </div>
     <div data-bind="css: {'visible': openMenu()}" class="search-block">
         <form class='search' data-bind="submit: search">
-            <input class="search-bar" data-bind="textInput: query" placeholder="Enter name or type" autofocus></input>
+            <input class="search-bar" data-bind="textInput: query" placeholder="Enter name or type" autofocus>
             <button class="search-button" type="submit">
                 <i class="fa fa-search" aria-hidden="true"></i>
             </button>
@@ -40,18 +39,25 @@
         No results matched your search
     </div>
 
-    <div class="foursquare">
+    <div data-bind="visible: chosenPlace(), click: toggleFs, css: {'active': openFs()}" class="fs-replace">
+        <i class="fa fa-foursquare" aria-hidden="true"></i>
+    </div>
+    <div data-bind="visible: chosenPlace(), css: {'visible': openFs()}"" class="foursquare">
         <h2>FourSquare Info</h2>
         <h3 data-bind="text: fsName" class="fsname"></h3>
-        <img data-bind="attr: {src: fsImg}" class="fsimg">
+        <a data-bind="visible: fsLink, attr: {href: fsLink}" class="fslink">More at FourSquare</a>
+        <img data-bind="attr: {src: fsImg, alt: fsName}" class="fsimg">
+        <h3 data-bind="visible: !fsImg() && fsLink()">No image found</h3>
         <div class="links">
             <a data-bind="visible: fsUrl, attr: {href: fsUrl}">Official Site</a>
             <a data-bind="visible: fsUrl, attr: {href: fsFacebook}">Facebook Page</a>
         </div>     
         <div class="rating" data-bind="visible: fsRating, text: fsRating"></div>
     </div>
+    <script src="js/lib/jquery-3.1.0.min.js"></script>
+    <script src="js/lib/knockout-3.4.0.js"></script>
     <script src="js/app.js"></script>
-    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcb18LjYYs41yetSMlwi6zuywEU5rY_Wc&v=3&callback=initMap&libraries=places" onerror="googleError()"">
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcb18LjYYs41yetSMlwi6zuywEU5rY_Wc&v=3&callback=initMap&libraries=places" onerror="googleError()">
     </script>
 </body>
 </html>

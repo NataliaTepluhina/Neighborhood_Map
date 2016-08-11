@@ -165,7 +165,7 @@ function ViewModel () {
         infowindow.setMap(null);
         self.allPlaces().forEach(function (place) {
             place.isInFilteredList(false);
-            place.marker.setMap(null);
+            place.marker.setVisible(false);
         });
         self.searchTerms().forEach(function (word) {
             self.allPlaces().forEach(function (place) {
@@ -174,7 +174,7 @@ function ViewModel () {
                 if (place.name.toLowerCase().indexOf(word) !== -1 ||
                     place.types.indexOf(word) !== -1) {
                     place.isInFilteredList(true);
-                    place.marker.setMap(map);
+                    place.marker.setVisible(true);
                 }
             });
         });
@@ -254,6 +254,7 @@ function ViewModel () {
     self.fsName = ko.observable();
     self.fsImg = ko.observable();
     self.fsUrl = ko.observable();
+    self.fsLink = ko.observable();
     self.fsFacebook = ko.observable();
     self.fsRating = ko.observable();
 
@@ -282,11 +283,12 @@ function ViewModel () {
                         $.ajax({url: foursquareURL})
                             .done(function(data) {
                                 self.fsName(data.response.venue.name);
-
+                                self.fsLink(data.response.venue.shortUrl);
+                                
                                 if (data.response.venue.bestPhoto) {
                                     self.fsImg(data.response.venue.bestPhoto.prefix + 'width300' + 
                                     data.response.venue.bestPhoto.suffix);
-                                }
+                                }                                
 
                                 if (data.response.venue.contact.facebook) {
                                     self.fsFacebook('https://www.facebook.com/' + data.response.venue.contact.facebook);
@@ -304,6 +306,7 @@ function ViewModel () {
                     }
                     else {
                         self.fsName('No such venue in FourSquare');
+                        self.fsLink('');
                     }
                 })
 
@@ -321,6 +324,15 @@ function ViewModel () {
 
     self.toggleMenu = function () {
         self.openMenu(!self.openMenu());
+    };
+
+    // Toggles visibility of Foursquare block. If window size is less than 470px, media-query will hide FS block
+    // until user will click on FS button.
+    self.openFs = ko.observable(false);
+
+
+    self.toggleFs = function () {
+        self.openFs(!self.openFs());
     };
 
 }
