@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Neighborhood Map</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/lib/jquery-3.1.0.min.js"></script>
+    <script src="js/lib/knockout-3.4.0.js"></script>
+    <script async src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCcb18LjYYs41yetSMlwi6zuywEU5rY_Wc&v=3&libraries=places">
+    </script>
+    <script src="js/app.js"></script>
+</head>
+<body>
+    <div id="map"></div>
+
+    <form class='search' data-bind="submit: search">
+    <input class="search-bar" data-bind="value: query" placeholder="Enter name or type" autofocus></input>
+    <button class="search-button" type="submit">Search</button>
+  </form>
+
+  <ul class="filtered-places" data-bind="visible: filteredPlaces().length,
+                                           foreach: {data: filteredPlaces, as: 'place'},
+                                           css: {'list-view-hidden': !displayingList()}">
+    <li class="place" data-bind="click: function() { $root.selectPlace(place); },
+                                  css: {'chosen-place': $data === $root.chosenPlace()},
+                                  attr: { id: place.id }">
+      <div class="place-info">
+        <h4 data-bind="text: place.name"></h4>
+        <p data-bind="text: place.vicinity"></p>
+      </div>
+    </li>
+  </ul>
+  <div class="no-results" data-bind="visible: filteredPlaces().length === 0,
+                                       css: {'list-view-hidden': !displayingList()}">
+    No results matched your search
+  </div>
+
+  <div class="foursquare">
+        <h2>FourSquare Info</h2>
+        <h3 data-bind="text: fsName" class="fsname"></h3>
+        <img data-bind="attr: {src: fsImg}" class="fsimg">
+        <div class="links">
+            <a data-bind="text: fsUrl, attr: {href: fsUrl}"></a>
+            <a data-bind="text: fsFacebook, attr: {href: fsFacebook}"></a>
+        </div>     
+        <div class="rating" data-bind="visible: fsRating, text: fsRating"></div>
+  </div>
+
+</body>
+</html>
