@@ -1,9 +1,12 @@
-window.onload = function() {
+// Creates the map with the center in given coordinates (Budva, Montenegro by default).  Then gets popular
+// restaurants/bars/cafe in the area.
+
+var map;
+var city;
 
 function ViewModel () {
     var self = this;
-    var map,
-        infowindow,
+    var infowindow,
         bounds;
 
     // Set values from getDayOfWeek function and string in GooglePlaces'
@@ -19,25 +22,14 @@ function ViewModel () {
     };
 
 
-     // Creates the map with the center in given coordinates (Budva, Montenegro by default).  Then gets popular
-     // restaurants/bars/cafe in the area.
 
-    function initMap() {
-        city = {lat: 42.288056, lng: 18.8425};
-        map = new google.maps.Map(document.getElementById('map'), {
-            center: city,
-            zoom: 15
-        });
-
-        getAllPlaces();
-    }
 
     // Makes a request to Google for popular restaurants and hotels in a given place.
     // Executes a callback function with the response data from Google.
 
     self.allPlaces = ko.observableArray([]);
 
-    function getAllPlaces() {
+    self.getAllPlaces = function() {
         self.allPlaces([]);
         var request = {
             location: city,
@@ -47,7 +39,7 @@ function ViewModel () {
         infowindow = new google.maps.InfoWindow();
         service = new google.maps.places.PlacesService(map);
         service.nearbySearch(request, getAllPlacesCallback);
-    }
+    };
 
 
      // Takes resulting places from getAllPlaces function, adds additional
@@ -315,10 +307,20 @@ function ViewModel () {
         self.openMenu(!self.openMenu());
     };
 
-    initMap();
-
 }
 
-ko.applyBindings(new ViewModel());
 
-};
+
+var viewModel = new ViewModel();
+
+function initMap() {
+    city = {lat: 42.288056, lng: 18.8425};
+    map = new google.maps.Map(document.getElementById('map'), {
+        center: city,
+        zoom: 15
+    });
+
+    viewModel.getAllPlaces();
+}
+
+ko.applyBindings(viewModel);
