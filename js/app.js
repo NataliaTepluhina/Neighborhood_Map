@@ -306,23 +306,16 @@ function ViewModel () {
     };
 
 
-    // Toggles visibility of search results list. If window size is less than 865px, list will be hidden
+    // Toggles visibility of search results list. If window size is less than 865px, media-query will hide the list
     // until user will click on menu button.
-    self.openMenu = ko.observable(true);
+    self.openMenu = ko.observable(false);
 
-    $(window).resize(function() {
-        if ($(window).width() < 865)
-            self.openMenu(false);
-        else self.openMenu(true);
-    });
 
     self.toggleMenu = function () {
         self.openMenu(!self.openMenu());
     };
 
     initMap();
-
-    $(window).resize();
 
 }
 

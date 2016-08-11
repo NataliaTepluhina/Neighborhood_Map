@@ -263,6 +263,14 @@ h4 {
         font-size: 14px;
     }
 
+    .filtered-places {
+        width: 218px;
+    }
+
+    .search {
+        width: 200px;
+    }
+
     .place {
         padding-left: 5px;
     }
@@ -299,5 +307,18 @@ h4 {
     .search-replace {
         display: block;
     }
+
+    .search-block {
+        display: none;
+    }
+
+    .visible {
+        display: block;
+    }
+
+@media screen and (max-width: 469px) {
+    .foursquare {
+        display: none;
+    
 
 }

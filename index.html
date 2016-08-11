@@ -16,7 +16,7 @@
     <div  data-bind="click: toggleMenu, css: {'active': openMenu()}" class="search-replace">
         <i class="fa fa-bars" aria-hidden="true"></i>
     </div>
-    <div data-bind="visible: openMenu()" class="search-block">
+    <div data-bind="css: {'visible': openMenu()}" class="search-block">
         <form class='search' data-bind="submit: search">
             <input class="search-bar" data-bind="value: query" placeholder="Enter name or type" autofocus></input>
             <button class="search-button" type="submit">
